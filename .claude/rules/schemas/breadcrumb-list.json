@@ -1,0 +1,24 @@
+{
+  "@context": "https://schema.org",
+  "@type": "BreadcrumbList",
+  "itemListElement": [
+    {
+      "@type": "ListItem",
+      "position": 1,
+      "name": "{{LEVEL_1_NAME}}",
+      "item": "{{LEVEL_1_URL}}"
+    },
+    {
+      "@type": "ListItem",
+      "position": 2,
+      "name": "{{LEVEL_2_NAME}}",
+      "item": "{{LEVEL_2_URL}}"
+    },
+    {
+      "@type": "ListItem",
+      "position": 3,
+      "name": "{{LEVEL_3_NAME}}",
+      "item": "{{LEVEL_3_URL}}"
+    }
+  ]
+}

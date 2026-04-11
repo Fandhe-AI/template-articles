@@ -1,0 +1,18 @@
+{
+  "@context": "https://schema.org",
+  "@type": "Organization",
+  "name": "{{ORG_NAME}}",
+  "url": "{{ORG_URL}}",
+  "logo": "{{ORG_LOGO_URL}}",
+  "description": "{{ORG_DESCRIPTION}}",
+  "sameAs": [
+    "{{SOCIAL_URL_1}}",
+    "{{SOCIAL_URL_2}}"
+  ],
+  "contactPoint": {
+    "@type": "ContactPoint",
+    "contactType": "{{CONTACT_TYPE}}",
+    "email": "{{CONTACT_EMAIL}}",
+    "url": "{{CONTACT_URL}}"
+  }
+}

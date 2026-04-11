@@ -1,0 +1,23 @@
+{
+  "@context": "https://schema.org",
+  "@type": "HowTo",
+  "name": "{{HOWTO_TITLE}}",
+  "description": "{{HOWTO_DESCRIPTION}}",
+  "step": [
+    {
+      "@type": "HowToStep",
+      "name": "{{STEP_1_NAME}}",
+      "text": "{{STEP_1_TEXT}}",
+      "url": "{{STEP_1_URL}}",
+      "image": "{{STEP_1_IMAGE}}"
+    },
+    {
+      "@type": "HowToStep",
+      "name": "{{STEP_2_NAME}}",
+      "text": "{{STEP_2_TEXT}}",
+      "url": "{{STEP_2_URL}}",
+      "image": "{{STEP_2_IMAGE}}"
+    }
+  ],
+  "totalTime": "{{TOTAL_TIME_ISO8601}}"
+}
