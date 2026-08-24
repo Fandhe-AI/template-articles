@@ -101,7 +101,7 @@ cd zenn && pnpm run lint
 - [ ] 全リンクが有効（404 なし）
 - [ ] 全画像に説明的な Alt text がある
 - [ ] 画像パスが `/images/` から始まる
-- [ ] `cd zenn && pnpm run lint` が通る（または未対応の理由を記録）
+- [ ] `cd zenn && pnpm run lint` を実行し、Lint 判定を満たす（`markdownlint`・`no-mix-dearu-desumasu` は 0 件必須。理由付きで残せるのはその他の textlint 指摘のみで、件数と理由をセクション 5 に記録済み）
 
 ### プレビュー
 
