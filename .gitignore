@@ -6,6 +6,9 @@
 
 _/
 
+# Node (zenn-cli, textlint, markdownlint)
+node_modules/
+
 # Editor
 *.swp
 *~

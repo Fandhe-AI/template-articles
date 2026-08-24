@@ -17,7 +17,9 @@ Phase 4: セマンティック・レビュー
   ▼ [品質判定]
 Phase 5: テクニカル基盤・構造化データ
   ├─ 自社サイト等 → Technical Translator（JSON-LD, OGP）
-  └─ Medium      → Medium Publisher（英語化, Medium 記法, GPT 画像プロンプト）
+  ├─ Zenn        → Zenn Publisher（frontmatter, Zenn 記法, textlint）
+  ├─ Medium      → Medium Publisher（英語化, Medium 記法, GPT 画像プロンプト）
+  └─ note        → note Publisher（note 記法, GPT 画像プロンプト, textlint）※日本語の新規記事の既定
   ▼ [公開判定]
 ```
 
@@ -51,7 +53,9 @@ articles/
 │   ├── 03-writing.md
 │   ├── 04-review.md
 │   ├── 05-technical.md
-│   └── 05-medium.md               # Medium 公開時の Phase 5
+│   ├── 05-zenn.md                 # Zenn 公開時の Phase 5
+│   ├── 05-medium.md               # Medium 公開時の Phase 5
+│   └── 05-note.md                 # note 公開時の Phase 5
 │
 ├── docs/
 │   ├── guide/                     # ガイドドキュメント
@@ -69,19 +73,30 @@ articles/
 │       ├── 02-outline.md
 │       ├── 03-draft.md
 │       ├── 04-review.md
-│       └── 05-technical.md        # または 05-medium.md
+│       └── 05-technical.md        # または 05-zenn.md / 05-medium.md / 05-note.md
+│
+├── zenn/                          # Zenn の GitHub 連携用（pnpm）
+│   ├── articles/                  # <slug>.md
+│   ├── images/<yyyy-mm>/
+│   ├── package.json               # zenn-cli / textlint / markdownlint
+│   ├── .textlintrc.json
+│   └── .markdownlint-cli2.jsonc
 │
 ├── medium/                        # Medium 公開用の英語記事下書き
 │   ├── articles/                  # <slug>.md（status: draft）
 │   └── images/<yyyy-mm>/          # GPT 生成画像（人間が生成・保存）
 │
+├── note/                          # note 公開用の日本語記事下書き（日本語の新規記事の既定）
+│   ├── articles/                  # <slug>.md（status: draft）
+│   └── images/<yyyy-mm>/          # GPT 生成画像（人間が生成・保存）
+│
 └── .claude/
-    ├── agents/                    # マルチエージェント（6 ロール）
+    ├── agents/                    # マルチエージェント（8 ロール）
     ├── rules/                     # AI 向けルール・リソース
     │   ├── brand-identity.md
     │   ├── entity-dictionary.md
     │   ├── phases/                # XML 構造化プロンプト
-    │   ├── platforms/             # 公開先プラットフォーム仕様（medium.md）
+    │   ├── platforms/             # 公開先プラットフォーム仕様（zenn.md, medium.md, note.md）
     │   └── schemas/               # JSON-LD テンプレート
     └── skills/                    # スキルコマンド
 ```
@@ -95,7 +110,9 @@ articles/
 | Module Creator | 執筆・チャンキング | Phase 3 |
 | Auditor | 監査・品質保証 | Phase 4 |
 | Technical Translator | 構造化データ変換 | Phase 5（自社サイト等） |
+| Zenn Publisher | Zenn 公開変換 | Phase 5（Zenn） |
 | Medium Publisher | Medium 公開変換（英語化） | Phase 5（Medium） |
+| note Publisher | note 公開変換 | Phase 5（note） |
 
 ## スキル一覧
 
@@ -105,7 +122,42 @@ articles/
 | `/advance-phase <name>` | 現フェーズを完了し次へ進行 |
 | `/article-status [name]` | 記事の進捗状況を表示 |
 | `/article-summary <name>` | 全フェーズの要約を生成 |
+| `/zenn-publish <name>` | レビュー済み記事を Zenn 公開形式に変換 |
 | `/medium-publish <name>` | レビュー済み記事を Medium 公開形式（英語）に変換 |
+| `/note-publish <name>` | レビュー済み記事を note 公開形式（日本語）に変換 |
+
+## note で公開する場合（日本語の新規記事の既定）
+
+Phase 4 まで完了したら `/note-publish <name>` を実行する。`note/articles/<slug>.md` に日本語記事が `status: draft` の状態で生成され、`articles/<name>/05-note.md` に GPT 画像生成プロンプト（見出し画像 + 差し込み）と公開チェックリストが記録される。
+
+- Phase 1 で note 内競合分析（上位記事の構成・ハッシュタグ）を追加で行う
+- note は表・Mermaid・脚注・インラインコードに非対応のため、変換時に箇条書き・画像化指示に置き換える
+- 画像は人間が GPT で生成し `note/images/<yyyy-mm>/` に保存する（見出し画像は 1280×670px 比率）
+- textlint は Zenn の設定を共用する: `cd zenn && pnpm exec textlint ../note/articles/<slug>.md`
+
+> **note の規約と AI の扱い**の正典は [`.claude/rules/platforms/note.md`](.claude/rules/platforms/note.md) の「最重要の制約」（公式リンク・最終確認日つき。制度内容はここに複製しない）。公開前に人間が公式ページを再確認する。
+> エージェントの担当は下書きファイルの作成まで。人間が全文を読んで自分の言葉として加筆修正し、note エディタへの貼り付け・画像の再アップロード・ハッシュタグ設定・有料設定・公開を人間が行う（貼り付け手順は同ファイルの「公開モデル」）。
+
+## Zenn で公開する場合
+
+Phase 4 まで完了したら `/zenn-publish <name>` を実行する。`zenn/articles/<slug>.md` が `published: false` の状態で生成される。
+
+`zenn/` は zenn-cli・textlint・markdownlint がセットアップ済み（pnpm）。clone 直後は依存関係のインストールのみ行う。
+
+```bash
+cd zenn
+pnpm install
+
+pnpm run preview   # ローカルプレビュー（http://localhost:8000）
+pnpm run lint      # textlint + markdownlint
+```
+
+zenn コマンドは必ず `zenn/` 内で実行する（リポジトリルートで実行すると、ワークフロー用の `articles/` を記事と誤認する）。
+
+> **Zenn は生成 AI に記事を生成させて量産する行為を禁止している。**
+> 本ワークフローは執筆支援であり、文責は人間にある。全文を読んで自分の言葉として責任を持てると判断したときにのみ、人間が `published: true` に変更して公開する。エージェントは公開を実行しない。
+
+仕様は [`.claude/rules/platforms/zenn.md`](.claude/rules/platforms/zenn.md) を参照。
 
 ## Medium で公開する場合
 

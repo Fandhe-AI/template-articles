@@ -1,0 +1,26 @@
+{
+  // Zenn 記事向けの markdownlint 設定
+  // 記事本体のみを対象にする（node_modules や README は除外）
+  "globs": ["articles/**/*.md"],
+  "ignores": ["node_modules/**", "README.md"],
+  "config": {
+    "default": true,
+
+    // Zenn は frontmatter の title を H1 としてレンダリングするため、本文に H1 は書かない。
+    // MD025 はデフォルト設定のまま有効にしておく（frontmatter の title を H1 と数えるので、
+    // 本文に `#` を書くと「H1 が 2 つ」として検出される = 本文 H1 の禁止が効く）。
+    "MD041": false, // first-line-heading: 本文が H2 から始まってよい
+
+    // 日本語の技術記事では行長制限が実用に合わない（textlint の sentence-length で担保する）
+    "MD013": false,
+
+    // 同名の H3 がセクションをまたいで出てよい（「手順」「注意点」など）
+    "MD024": { "siblings_only": true },
+
+    // Zenn 独自記法・埋め込みで HTML を使う場合がある
+    "MD033": false,
+
+    // 単独行 URL（Zenn のリンクカード記法）を許可する
+    "MD034": false
+  }
+}
