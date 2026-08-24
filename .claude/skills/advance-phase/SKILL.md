@@ -21,15 +21,16 @@ user-invocable: true
    | 2. アウトライン | `02-outline.md` | タイトル確定、H2 見出し 3 件以上、エンティティ配置マップ |
    | 3. 執筆 | `03-draft.md` | 全 H2 セクション執筆済み、ファクトデータ記録済み |
    | 4. レビュー | `04-review.md` | 修正指示リスト作成済み、全修正反映済み |
-
    **Phase 5 は公開先によって完了条件が変わる。該当する行だけを判定に使い、他のファイルの不在を未完了とみなさない。**
 
    | フェーズ | 公開先 | 必須ファイル | 完了条件 |
    |---------|--------|------------|---------|
    | 5. テクニカル | 自社サイト等 | `05-technical.md` | JSON-LD 生成済み、公開チェックリスト全項目完了 |
+   | 5. テクニカル | Zenn | `05-zenn.md` + `zenn/articles/<slug>.md` | 記事本体（`published: false`）が存在、frontmatter 確定、Zenn 記法変換済み、`pnpm run lint` 通過、Phase 5 完了チェックリスト全項目完了 |
    | 5. テクニカル | Medium | `05-medium.md` + `medium/articles/<slug>.md` | 英語記事本体（`status: draft`）が存在、英語化・Medium 互換記法変換済み、title/tags 確定、GPT 画像プロンプト完備、手動チェック通過、Phase 5 完了チェックリスト全項目完了 |
+   | 5. テクニカル | note | `05-note.md` + `note/articles/<slug>.md` | 日本語記事本体（`status: draft`・`paid: false`）が存在、note 互換記法変換済み、title/hashtags 確定、GPT 画像プロンプト完備、textlint・手動チェック通過、Phase 5 完了チェックリスト全項目完了 |
 
-   Medium の場合、**`status: draft` のままで Phase 5 は完了する**。公開（リッチテキスト化して Medium エディタへ貼り付け・公開）は Phase 5 の完了条件に含まれず、人間が別途判断して実施する。
+   Zenn の場合、**`published: false` のままで Phase 5 は完了する**。Medium・note の場合、**`status: draft` のままで Phase 5 は完了する**。公開（Zenn: `published: true` への変更と push、Medium・note: エディタへの貼り付けと公開）は Phase 5 の完了条件に含まれず、人間が別途判断して実施する。
 
 3. 判定ゲートを実施する
    - ユーザーに判定材料を提示する
@@ -42,7 +43,7 @@ user-invocable: true
    | アウトライン承認（2→3） | **人間が内容を確認・承認したか？**（最重要） |
    | 草稿完成判定（3→4） | 全セクションが執筆済みか？ |
    | 品質判定（4→5） | 全修正指示が反映されたか？ |
-   | 公開判定（5→完了） | 公開準備が完了したか？（Medium の場合、公開そのものは人間が別途行う） |
+   | 公開判定（5→完了） | 公開準備が完了したか？（Zenn・Medium・note の場合、公開そのものは人間が別途行う） |
 
 4. Go の場合、README.md を更新する
    - 現フェーズ: 🔄 → ✅ に変更、更新日を記入
@@ -54,7 +55,9 @@ user-invocable: true
    - 次フェーズのプロンプトテンプレート（`.claude/rules/phases/`）を参照して開始する
    - **Phase 4 → 5 では公開先プラットフォームをユーザーに確認する**
      - 自社サイト等: `technical-translator` + `05-technical-prompt.md`
+     - Zenn: `zenn-publisher` + `05-zenn-prompt.md`（`/zenn-publish` に委譲してもよい）
      - Medium: `medium-publisher` + `05-medium-prompt.md`（`/medium-publish` に委譲してもよい）
+     - note: `note-publisher` + `05-note-prompt.md`（`/note-publish` に委譲してもよい）。日本語の新規記事は note を既定とする
 
 6. Phase 5 が完了した場合
    - 全フェーズのサマリーを生成する

@@ -41,9 +41,11 @@ description: |
 | Phase 3 | `module-creator` | 承認済みアウトライン、ファクトチェックデータ、エンティティ辞書 |
 | Phase 4 | `auditor` | 草稿、エンティティ辞書、ブランドガイドライン |
 | Phase 5（自社サイト等） | `technical-translator` | 最終版記事、メタデータ、スキーマテンプレート |
+| Phase 5（Zenn） | `zenn-publisher` | 最終版記事、タイトル案、優先度「高」エンティティ、Zenn 仕様 |
 | Phase 5（Medium） | `medium-publisher` | 最終版記事、タイトル案（Phase 2）、Medium 内競合分析（Phase 1）、`.claude/rules/platforms/medium.md`、エンティティ辞書 |
+| Phase 5（note） | `note-publisher` | 最終版記事、タイトル案（Phase 2）、note 内競合分析（Phase 1）、`.claude/rules/platforms/note.md`、エンティティ辞書 |
 
-Phase 4→5 では公開先プラットフォーム（自社サイト等 / Medium）をユーザーに確認してから委任する。Medium の場合、Medium 内競合分析が `01-research.md` に実データつきで存在しない場合は委任せず、Phase 1 への部分差し戻し（`strategist-researcher` がタスク 5 のみ実施）を先に行う。
+**Phase 4 → 5 の遷移時は、公開先プラットフォーム（自社サイト等 / Zenn / Medium / note）をユーザーに確認してから委任先を決める。** 日本語の新規記事は note を既定とする。Zenn・Medium・note は JSON-LD・OGP を自動生成・管理するため、`technical-translator` の成果物は不要になる。Medium・note の場合、それぞれのプラットフォーム内競合分析が `01-research.md` に実データつきで存在しない場合は委任せず、Phase 1 への部分差し戻し（`strategist-researcher` が該当タスク〔Medium: タスク 5、note: タスク 6〕のみ実施）を先に行う。
 
 ### 判定ゲート基準
 
@@ -55,6 +57,8 @@ Phase 4→5 では公開先プラットフォーム（自社サイト等 / Mediu
 | 品質判定（4→5） | 修正指示が全て反映されたか | Phase 3-4 再実施 |
 | 公開判定（5→公開） | 全チェックリスト項目が完了か | Phase 5 修正 |
 
+Zenn の場合、公開判定には**人間が記事全文を読んで自分の言葉として責任を持てると確認したこと**を含める。`published: true` への変更と push はエージェントが実行しない。Medium・note の場合も同様に `status: draft` のまま完了とし、貼り付け・公開（Medium は submit、note は有料設定・AI 学習提供の設定を含む）はエージェントが実行しない。
+
 ## 対話ガイドライン
 
 - ユーザーには常に現在のフェーズと進捗状況を明示する
@@ -63,6 +67,6 @@ Phase 4→5 では公開先プラットフォーム（自社サイト等 / Mediu
 
 ## 参照リソース
 
-- `_templates/01-research.md` 〜 `05-technical.md` / `05-medium.md` — 各フェーズの成果物フォーマット（Phase 5 は公開先で分岐）
-- `.claude/rules/phases/01-research-prompt.md` 〜 `05-technical-prompt.md` / `05-medium-prompt.md` — 各フェーズのプロンプトテンプレート
+- `_templates/01-research.md` 〜 `05-technical.md` / `05-zenn.md` / `05-medium.md` / `05-note.md` — 各フェーズの成果物フォーマット（Phase 5 は公開先で分岐）
+- `.claude/rules/phases/01-research-prompt.md` 〜 `05-technical-prompt.md` / `05-zenn-prompt.md` / `05-medium-prompt.md` / `05-note-prompt.md` — 各フェーズのプロンプトテンプレート
 - `articles/<name>/README.md` — 記事のステータス管理

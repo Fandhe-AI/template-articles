@@ -1,0 +1,31 @@
+{
+  "rules": {
+    "preset-ja-technical-writing": {
+      "sentence-length": {
+        "max": 100
+      },
+      "no-exclamation-question-mark": {
+        "allowFullWidthExclamation": false,
+        "allowFullWidthQuestion": true
+      },
+      "ja-no-mixed-period": {
+        "allowPeriodMarks": ["：", "?", "？"]
+      },
+      "no-doubled-joshi": {
+        "min_interval": 1
+      },
+      "max-comma": {
+        "max": 4
+      }
+    }
+  },
+  "filters": {
+    "comments": true,
+    "allowlist": {
+      "allow": [
+        "/^:::.*$/m",
+        "/^@\\[[a-z]+\\]\\(.+\\)$/m"
+      ]
+    }
+  }
+}

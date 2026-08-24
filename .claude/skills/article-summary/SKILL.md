@@ -18,7 +18,9 @@ user-invocable: true
    - `03-draft.md` — 草稿
    - `04-review.md` — レビュー結果
    - `05-technical.md` — テクニカル情報（自社サイト等に公開する場合）
+   - `05-zenn.md` — Zenn 公開変換（Zenn に公開する場合）
    - `05-medium.md` — Medium 公開変換（Medium に公開する場合）
+   - `05-note.md` — note 公開変換（note に公開する場合）
 
    Phase 5 は公開先によってファイルが分岐する。**存在するものを読む**。
 
@@ -58,11 +60,26 @@ user-invocable: true
    - 生成スキーマ: （Article, FAQPage 等）
    - 公開チェックリスト達成率:
 
+   <!-- 05-zenn.md がある場合（Zenn） -->
+   - 公開先: Zenn
+   - slug / 公開 URL:
+   - frontmatter: （title, emoji, type, topics）
+   - Lint 結果: （textlint / markdownlint）
+   - 公開状態: （`published: false` = 未公開。公開は人間が判断する）
+
    <!-- 05-medium.md がある場合（Medium） -->
    - 公開先: Medium
    - slug（ファイル管理用）:
    - メタデータ: （title, subtitle, tags）
    - 画像プロンプト: （feature 1 件 + 差し込み N 件）
+   - 公開状態: （`status: draft` = 未公開。画像生成・貼り付け・公開は人間が行う）
+
+   <!-- 05-note.md がある場合（note） -->
+   - 公開先: note
+   - slug（ファイル管理用）:
+   - メタデータ: （title, hashtags）
+   - 画像プロンプト: （見出し画像 1 件 + 差し込み N 件）
+   - textlint 結果:
    - 公開状態: （`status: draft` = 未公開。画像生成・貼り付け・公開は人間が行う）
 
    ## 次のアクション

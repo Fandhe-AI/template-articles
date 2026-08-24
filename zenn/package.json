@@ -1,0 +1,24 @@
+{
+  "name": "zenn",
+  "version": "1.0.0",
+  "private": true,
+  "description": "Zenn の GitHub 連携用ディレクトリ（zenn-cli / textlint / markdownlint）",
+  "scripts": {
+    "preview": "zenn preview",
+    "new:article": "zenn new:article",
+    "lint": "pnpm run lint:text && pnpm run lint:md",
+    "lint:text": "textlint \"articles/**/*.md\"",
+    "lint:md": "markdownlint-cli2 \"articles/**/*.md\"",
+    "lint:fix": "textlint --fix \"articles/**/*.md\" && markdownlint-cli2 --fix \"articles/**/*.md\""
+  },
+  "license": "UNLICENSED",
+  "packageManager": "pnpm@10.32.1",
+  "devDependencies": {
+    "markdownlint-cli2": "^0.23.0",
+    "textlint": "^15.7.1",
+    "textlint-filter-rule-allowlist": "^4.0.0",
+    "textlint-filter-rule-comments": "^1.3.0",
+    "textlint-rule-preset-ja-technical-writing": "^12.0.2",
+    "zenn-cli": "^0.5.2"
+  }
+}

@@ -163,15 +163,23 @@ AI エンジンがコンテンツの文脈を正確に把握し、引用でき�
 | 公開先 | 担当エージェント | 主な作業 | 出力 |
 | --- | --- | --- | --- |
 | 自社サイト等（デフォルト） | Technical Translator | JSON-LD 生成、セマンティック HTML 指示 | `05-technical.md` |
+| Zenn | Zenn Publisher | frontmatter 設計、Zenn 記法変換、textlint | `05-zenn.md` + `zenn/articles/<slug>.md` |
 | Medium | Medium Publisher | 英語化、Medium 互換記法変換、GPT 画像プロンプト | `05-medium.md` + `medium/articles/<slug>.md` |
+| note | note Publisher | note 互換記法変換、GPT 画像プロンプト、textlint | `05-note.md` + `note/articles/<slug>.md` |
 
-Medium は JSON-LD・OGP を自動生成するため手動生成しない。仕様は `.claude/rules/platforms/medium.md` を参照。
+**日本語の新規記事の公開先は note を既定とする**（Zenn の仕組みは Zenn へ出す記事のために残す）。Zenn・Medium・note は JSON-LD・OGP を自動生成・管理するため手動生成しない。仕様は `.claude/rules/platforms/zenn.md` / `.claude/rules/platforms/medium.md` / `.claude/rules/platforms/note.md` を参照。
 
 ### 自社サイト等の場合
 
 - **ゴール**: JSON-LD スキーマ生成、セマンティック HTML マークアップ指示、公開チェックリスト全項目完了、継続監視計画の策定
 - **進め方**: 最終版記事とメタデータを `.claude/rules/phases/05-technical-prompt.md` のプロンプトに投入し、Technical Translator が JSON-LD・HTML 指示・チェックリストを生成、結果を `articles/<name>/05-technical.md` に記録する
 - **完了条件**: `05-technical.md` が作成され、JSON-LD が Google Rich Results Test で有効、公開チェックリスト全項目完了
+
+### Zenn の場合
+
+- `/zenn-publish <article-name>` を実行する（Zenn Publisher + `.claude/rules/phases/05-zenn-prompt.md`）
+- **完了条件**: `zenn/articles/<slug>.md`（**`published: false` のまま**）、`cd zenn && pnpm run lint` 通過、プレビュー確認、`05-zenn.md` のチェックリスト完了
+- 公開（`published: true` への変更と push）は人間が行う。Phase 5 の完了条件に含まれない
 
 ### Medium の場合
 
@@ -180,7 +188,14 @@ Medium は JSON-LD・OGP を自動生成するため手動生成しない。仕�
 - **完了条件**: `medium/articles/<slug>.md`（**`status: draft` のまま**）、Medium で崩れる記法（表・Mermaid・脚注等）の除去、GPT 画像生成プロンプト完備、`05-medium.md` のチェックリスト完了
 - 画像生成（GPT）・Medium エディタへの貼り付け・公開は人間が行う。Phase 5 の完了条件に含まれない
 
+### note の場合（日本語の新規記事の既定）
+
+- `/note-publish <article-name>` を実行する（note Publisher + `.claude/rules/phases/05-note-prompt.md`）
+- 記事本文は日本語。Phase 1 で note 内競合分析（上位記事・ハッシュタグ）を済ませておく
+- **完了条件**: `note/articles/<slug>.md`（**`status: draft`・`paid: false` のまま**）、note で崩れる記法（表・Mermaid・脚注・インラインコード等）の除去、GPT 画像生成プロンプト完備、textlint 通過（`zenn/.textlintrc.json` を共用）、`05-note.md` のチェックリスト完了
+- 画像生成（GPT）・note エディタへの貼り付け・有料設定・公開は人間が行う。Phase 5 の完了条件に含まれない
+
 ### 判定ゲート: 公開判定
 
-- 公開準備が完了したか？（Medium の場合、公開そのものは人間が別途行う）
+- 公開準備が完了したか？（Zenn・Medium・note の場合、公開そのものは人間が別途行う）
 - 継続監視計画が策定されたか？
