@@ -119,13 +119,20 @@ cd zenn && pnpm run lint
 - [ ] **人間が記事全文を読み、自分の言葉として責任を持てる内容であることを確認した**
 - [ ] Zenn の生成 AI による記事量産禁止ポリシーに抵触しないことを確認した
 
+Zenn の GitHub 連携は**同期ブランチのルート直下**の `articles/` を参照するため、`zenn/articles/` を含むブランチをそのまま push しても同期されない（`.claude/rules/platforms/zenn.md` の「ディレクトリ構造」参照）。`zenn/` の内容をルートに持つ公開専用ブランチを更新して push する。
+
 ```bash
 # 公開（人間の最終確認後）
 # zenn/articles/<slug>.md の published を true に変更してから
 git add zenn/articles/<slug>.md
 git commit -m "post: <slug>"
-git push origin <Zenn 連携ブランチ>
+
+# zenn/ の内容をルートに持つ同期ブランチ（例: publish）を作り直して push する
+git subtree split --prefix zenn -b publish
+git push -f origin publish
 ```
+
+Zenn 連携専用の別リポジトリを使う場合は、`zenn/` の内容をそのリポジトリのルートへコピーして push する。
 
 ## 8. 公開後の監視
 

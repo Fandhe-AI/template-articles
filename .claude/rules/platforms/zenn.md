@@ -368,7 +368,7 @@ pnpm run lint:fix    # 自動修正できるものを修正
 **Phase 5（エージェントの担当範囲）** — ここまでで Phase 5 は完了する。
 
 1. `zenn/articles/<slug>.md` を作成（`published: false`）
-2. `cd zenn && pnpm run lint` を通す
+2. `cd zenn && pnpm run lint` を実行し、Lint 判定を満たす（`markdownlint`・`no-mix-dearu-desumasu` は 0 件。その他の textlint 指摘は 0 件、または件数と理由を `05-zenn.md` に記録する）
 3. `cd zenn && pnpm run preview` で表示崩れがないことを確認する
 
 **公開（人間の担当範囲）** — Phase 5 完了後に、人間が任意のタイミングで実施する。

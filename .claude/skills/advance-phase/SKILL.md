@@ -26,7 +26,7 @@ user-invocable: true
    | フェーズ | 公開先 | 必須ファイル | 完了条件 |
    |---------|--------|------------|---------|
    | 5. テクニカル | 自社サイト等 | `05-technical.md` | JSON-LD 生成済み、公開チェックリスト全項目完了 |
-   | 5. テクニカル | Zenn | `05-zenn.md` + `zenn/articles/<slug>.md` | 記事本体（`published: false`）が存在、frontmatter 確定、Zenn 記法変換済み、`pnpm run lint` 通過、Phase 5 完了チェックリスト全項目完了 |
+   | 5. テクニカル | Zenn | `05-zenn.md` + `zenn/articles/<slug>.md` | 記事本体（`published: false`）が存在、frontmatter 確定、Zenn 記法変換済み、Lint 判定通過（`markdownlint`・`no-mix-dearu-desumasu` は 0 件。その他の textlint 指摘は 0 件、または件数と理由が `05-zenn.md` に記録済み）、Phase 5 完了チェックリスト全項目完了 |
    | 5. テクニカル | Medium | `05-medium.md` + `medium/articles/<slug>.md` | 英語記事本体（`status: draft`）が存在、英語化・Medium 互換記法変換済み、title/tags 確定、GPT 画像プロンプト完備、手動チェック通過、Phase 5 完了チェックリスト全項目完了 |
    | 5. テクニカル | note | `05-note.md` + `note/articles/<slug>.md` | 日本語記事本体（`status: draft`・`paid: false`）が存在、note 互換記法変換済み、title/hashtags 確定、GPT 画像プロンプト完備、textlint・手動チェック通過、Phase 5 完了チェックリスト全項目完了 |
 
