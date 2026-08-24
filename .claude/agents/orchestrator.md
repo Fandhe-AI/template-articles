@@ -41,7 +41,7 @@ description: |
 | Phase 3 | `module-creator` | 承認済みアウトライン、ファクトチェックデータ、エンティティ辞書 |
 | Phase 4 | `auditor` | 草稿、エンティティ辞書、ブランドガイドライン |
 | Phase 5（自社サイト等） | `technical-translator` | 最終版記事、メタデータ、スキーマテンプレート |
-| Phase 5（Zenn） | `zenn-publisher` | 最終版記事、タイトル案、優先度「高」エンティティ、Zenn 仕様 |
+| Phase 5（Zenn） | `zenn-publisher` | 最終版記事、タイトル案、優先度「高」エンティティ、Zenn 仕様、エンティティ辞書 |
 | Phase 5（Medium） | `medium-publisher` | 最終版記事、タイトル案（Phase 2）、Medium 内競合分析（Phase 1）、`.claude/rules/platforms/medium.md`、エンティティ辞書 |
 | Phase 5（note） | `note-publisher` | 最終版記事、タイトル案（Phase 2）、note 内競合分析（Phase 1）、`.claude/rules/platforms/note.md`、エンティティ辞書 |
 

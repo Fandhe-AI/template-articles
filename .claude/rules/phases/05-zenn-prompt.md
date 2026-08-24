@@ -27,6 +27,10 @@
   <zenn_spec>
     {{ZENN_PLATFORM_RULES}}
   </zenn_spec>
+
+  <entity_dictionary>
+    {{ENTITY_DICTIONARY_CONTENT}}
+  </entity_dictionary>
 </context>
 
 <examples>
@@ -101,6 +105,8 @@
      - 手動の目次があれば削除する（Zenn が自動生成）
 
   3.5. **可読性の調整**（事実・数値・留保は一切変えない）
+     - entity_dictionary の正式表記を維持する（`max-kanji-continuous-len` 等の Lint 指摘を
+       回避するために正式名称を崩さない。表記揺れを見つけた場合は辞書の正式表記に統一する）
      - 見出しを**短い質問形**にする。副題（`— ...`）を付けない
      - 記事の中核になる主張を、太字段落から **H2 / H3 に昇格**させる（Zenn は H2/H3 から目次を生成する）
      - **桁数の多い数値を地の文で繰り返さない。** 正確な値は表に集約し、地の文は丸めた値にする
@@ -141,5 +147,6 @@
 1. `{{PHASE_4_REVIEWED_ARTICLE}}` に Phase 4 の修正指示を反映した最終版記事を貼り付ける
 2. `{{PHASE_2_TITLE_CANDIDATES}}` / `{{PHASE_1_HIGH_PRIORITY_ENTITIES}}` を各フェーズのドキュメントから引く
 3. `{{ZENN_PLATFORM_RULES}}` に `.claude/rules/platforms/zenn.md` の内容を貼り付ける
-4. Zenn Publisher エージェントにプロンプト全体を渡す
-5. 出力された `zenn/articles/<slug>.md` を**人間が全文確認**し、自分の言葉として責任を持てる状態にしてから `published: true` にする
+4. `{{ENTITY_DICTIONARY_CONTENT}}` に `.claude/rules/entity-dictionary.md` の内容を貼り付ける
+5. Zenn Publisher エージェントにプロンプト全体を渡す
+6. 出力された `zenn/articles/<slug>.md` を**人間が全文確認**し、自分の言葉として責任を持てる状態にしてから `published: true` にする

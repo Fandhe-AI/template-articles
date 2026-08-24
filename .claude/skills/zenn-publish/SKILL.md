@@ -37,6 +37,7 @@ user-invocable: true
      - `articles/$ARGUMENTS/02-outline.md`（タイトル案）
      - `articles/$ARGUMENTS/01-research.md`（優先度「高」のエンティティ → topics 候補）
      - `.claude/rules/platforms/zenn.md`（Zenn 仕様）
+     - `.claude/rules/entity-dictionary.md`（エンティティ表記の正典。正式表記の維持と、Lint で残す指摘の判断根拠に使う）
 
 4. **ユーザーへの確認事項**（エージェントが確定できない項目）
    - slug（公開後に変更不可のため必ず確認する）
