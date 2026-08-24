@@ -128,8 +128,10 @@ git add zenn/articles/<slug>.md
 git commit -m "post: <slug>"
 
 # zenn/ の内容をルートに持つ同期ブランチ（例: publish）を更新して push する
-# （subtree split はコミット SHA を出力する。ローカルブランチを作らないため何度でも実行できる）
-git push -f origin "$(git subtree split --prefix zenn HEAD)":refs/heads/publish
+# （subtree split はコミット SHA を出力する。ローカルブランチを作らないため何度でも実行できる。
+#   SHA を変数に取り、split が失敗・空のときは push しない: 空の refspec はリモートブランチの削除になる）
+SPLIT_SHA=$(git subtree split --prefix zenn HEAD) &&
+git push -f origin "${SPLIT_SHA:?subtree split failed}:refs/heads/publish"
 ```
 
 Zenn 連携専用の別リポジトリを使う場合は、`zenn/` の内容をそのリポジトリのルートへコピーして push する。

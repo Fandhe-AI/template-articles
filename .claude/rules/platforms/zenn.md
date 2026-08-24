@@ -13,7 +13,12 @@ Zenn（https://zenn.dev）で記事を公開する際の仕様・記法・制約
 
 ## ディレクトリ構造
 
-Zenn の GitHub 連携は**同期ブランチのルート直下**の `articles/` / `books/` を参照する。**サブディレクトリを指定する設定はなく、設定できるのは同期ブランチのみ**（正典: [GitHub リポジトリ連携ドキュメント](https://zenn.dev/zenn/articles/connect-to-github)）。本リポジトリはルート直下にワークフロー用の `articles/` があるため `main` を同期ブランチにせず、**`zenn/` の内容をルートに持つ公開専用ブランチ（例: `publish`）を同期ブランチに設定する**。`publish` ブランチは人間が `git push -f origin "$(git subtree split --prefix zenn HEAD)":refs/heads/publish` で更新する（subtree split はコミット SHA を出力するため、ローカルブランチを作らず公開のたびに繰り返し実行できる。Zenn 連携専用の別リポジトリへ `zenn/` の内容を push する方式でもよい）。
+Zenn の GitHub 連携は**同期ブランチのルート直下**の `articles/` / `books/` を参照する。**サブディレクトリを指定する設定はなく、設定できるのは同期ブランチのみ**（正典: [GitHub リポジトリ連携ドキュメント](https://zenn.dev/zenn/articles/connect-to-github)）。本リポジトリはルート直下にワークフロー用の `articles/` があるため `main` を同期ブランチにせず、**`zenn/` の内容をルートに持つ公開専用ブランチ（例: `publish`）を同期ブランチに設定する**。`publish` ブランチは人間が次のコマンドで更新する（subtree split はコミット SHA を出力するため、ローカルブランチを作らず公開のたびに繰り返し実行できる。SHA は必ず変数に取り、split が失敗・空のときは push しない — 空の refspec はリモートブランチの削除になる。Zenn 連携専用の別リポジトリへ `zenn/` の内容を push する方式でもよい）。
+
+```bash
+SPLIT_SHA=$(git subtree split --prefix zenn HEAD) &&
+git push -f origin "${SPLIT_SHA:?subtree split failed}:refs/heads/publish"
+```
 
 ```
 zenn/
@@ -375,7 +380,7 @@ pnpm run lint:fix    # 自動修正できるものを修正
 
 4. **人間が全文を読み、自分の言葉として責任を持てる内容か確認する**
 5. `published: true` に変更してコミット
-6. `git push -f origin "$(git subtree split --prefix zenn HEAD)":refs/heads/publish` で `zenn/` の内容をルートに持つ同期ブランチ（例: `publish`）を更新すると自動デプロイ（繰り返し実行できる。同期ブランチの設定は「ディレクトリ構造」参照）
+6. 「ディレクトリ構造」のコマンド（`SPLIT_SHA` を変数に取ってから refspec で push する 2 段構成）で `zenn/` の内容をルートに持つ同期ブランチ（例: `publish`）を更新すると自動デプロイ（繰り返し実行できる）
 
 ステップ 4-6 は Phase 5 の完了条件に含めない。Phase 5 は「公開可能な状態を作る」までであり、「公開する」は人間の判断による別の行為である。エージェントはステップ 5-6 を実行しない。
 
