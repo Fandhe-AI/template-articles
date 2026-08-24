@@ -27,7 +27,7 @@ user-invocable: true
    | フェーズ | 公開先 | 必須ファイル | 完了条件 |
    |---------|--------|------------|---------|
    | 5. テクニカル | 自社サイト等 | `05-technical.md` | JSON-LD 生成済み、公開チェックリスト全項目完了 |
-   | 5. テクニカル | Medium | `05-medium.md` | 英語化・Medium 互換記法変換済み、title/tags 確定、GPT 画像プロンプト完備、手動チェック通過、Phase 5 完了チェックリスト全項目完了 |
+   | 5. テクニカル | Medium | `05-medium.md` + `medium/articles/<slug>.md` | 英語記事本体（`status: draft`）が存在、英語化・Medium 互換記法変換済み、title/tags 確定、GPT 画像プロンプト完備、手動チェック通過、Phase 5 完了チェックリスト全項目完了 |
 
    Medium の場合、**`status: draft` のままで Phase 5 は完了する**。公開（リッチテキスト化して Medium エディタへ貼り付け・公開）は Phase 5 の完了条件に含まれず、人間が別途判断して実施する。
 

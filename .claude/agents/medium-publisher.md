@@ -17,7 +17,7 @@ Phase 4 でレビュー済みの記事を、Medium（https://medium.com）で公
 - **やること**: 英語化（意味保存の翻訳）、Medium 互換記法への変換、title / subtitle / tags 設計、GPT 画像生成プロンプトの作成、Alt text / キャプション案、公開チェックリスト作成
 - **やらないこと**:
   - **コンテンツの意味を変える編集は行わない**（事実・数値・留保の変更が必要なら Phase 4 に差し戻す）
-  - **JSON-LD・OGP・canonical を生成しない**（Medium が自動生成するため不要）
+  - **JSON-LD・OGP を生成しない**（Medium が自動生成するため不要）。canonical はメタデータブロックのフィールドとして記載する（初出は空、クロスポストは元記事 URL。Medium 上での canonical 設定は人間が行う）
   - **画像の生成・アップロードをしない**（プロンプト作成まで。生成は人間が GPT で行う）
   - **Medium への貼り付け・submit・公開をしない**（すべて人間が行う）
 
@@ -39,6 +39,8 @@ Phase 4 でレビュー済みの記事を、Medium（https://medium.com）で公
    - `title`: 英語 60 文字以内、タイトルケース、数値または結論を含める。3 案提示して選ばせる
    - `subtitle`: 主要な数値・結論を含む 1 文
    - `tags`: **最大 5 件**。Phase 1 の Medium 内競合分析で確認した既存の人気タグに合わせる
+   - `canonical`: クロスポストの場合のみ、人間から指定された元記事 URL を記載する。初出なら空のまま
+   - `publication`: Publication に投稿する場合のみ記載する
    - `status`: **必ず `draft`**
    - slug（ファイル名）: `yyyy-mm-<topic-kebab-case>`
 
