@@ -17,7 +17,10 @@ user-invocable: true
    - `02-outline.md` — アウトライン
    - `03-draft.md` — 草稿
    - `04-review.md` — レビュー結果
-   - `05-technical.md` — テクニカル情報
+   - `05-technical.md` — テクニカル情報（自社サイト等に公開する場合）
+   - `05-medium.md` — Medium 公開変換（Medium に公開する場合）
+
+   Phase 5 は公開先によってファイルが分岐する。**存在するものを読む**。
 
 3. 以下のフォーマットでサマリーを生成する:
 
@@ -50,8 +53,17 @@ user-invocable: true
    - 修正反映状況:
 
    ## Phase 5: テクニカル
+   <!-- 05-technical.md がある場合（自社サイト等） -->
+   - 公開先: 自社サイト等
    - 生成スキーマ: （Article, FAQPage 等）
    - 公開チェックリスト達成率:
+
+   <!-- 05-medium.md がある場合（Medium） -->
+   - 公開先: Medium
+   - slug（ファイル管理用）:
+   - メタデータ: （title, subtitle, tags）
+   - 画像プロンプト: （feature 1 件 + 差し込み N 件）
+   - 公開状態: （`status: draft` = 未公開。画像生成・貼り付け・公開は人間が行う）
 
    ## 次のアクション
    - （現フェーズに基づく推奨アクション）
