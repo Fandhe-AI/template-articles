@@ -24,7 +24,7 @@ pnpm install
 
 Zenn の GitHub 連携は**リポジトリ直下の `articles/` / `books/` を参照し、設定できるのは同期ブランチのみ**（サブディレクトリを指定する設定はない。正典: [GitHub リポジトリ連携ドキュメント](https://zenn.dev/zenn/articles/connect-to-github)）。本リポジトリはルート直下にワークフロー用の `articles/` があるため、`main` を同期ブランチにしてはならない。公開時は人間が次のいずれかを行う。
 
-- **公開専用ブランチ方式（推奨）**: `git subtree split --prefix zenn -b publish` で `zenn/` の内容をルートに持つ `publish` ブランチを作成・更新して push し、Zenn の同期ブランチに `publish` を設定する
+- **公開専用ブランチ方式（推奨）**: `git push -f origin "$(git subtree split --prefix zenn HEAD)":refs/heads/publish` で `zenn/` の内容をルートに持つ `publish` ブランチを更新し、Zenn の同期ブランチに `publish` を設定する（subtree split はコミット SHA を出力するため、ローカルブランチを作らず公開のたびに繰り返し実行できる）
 - **別リポジトリ方式**: Zenn 連携専用のリポジトリを作り、公開時に `zenn/` の内容をそのルートへコピーして push する
 
 ## コマンド

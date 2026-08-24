@@ -82,6 +82,12 @@ status: draft
 | `no-mix-dearu-desumasu` | 0 件 | |
 | 残した指摘 | N 件 | 理由: |
 
+### markdownlint（`cd zenn && pnpm run lint:md:note`）
+
+| 項目 | 結果 | 備考 |
+| --- | --- | --- |
+| エラー | 0 件 | 0 件必須（本文 H1 は MD025 で検出される） |
+
 ### 手動チェック
 
 | 項目 | 結果 | 備考 |
@@ -105,6 +111,8 @@ status: draft
 - [ ] 「この記事でわかること」「結論」「まとめ」「参考リンク」セクションがある
 - [ ] `status` が `draft`、`paid` が `false` である
 - [ ] 事実・数値・留保がレビュー済み原稿と一致している（変換で意味を変えていない）
+- [ ] textlint を実行し、`no-mix-dearu-desumasu` 0 件・残した指摘は件数と理由を記録した
+- [ ] markdownlint（`pnpm run lint:md:note`）が 0 件である
 
 ### 画像
 

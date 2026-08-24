@@ -127,9 +127,9 @@ Zenn の GitHub 連携は**同期ブランチのルート直下**の `articles/`
 git add zenn/articles/<slug>.md
 git commit -m "post: <slug>"
 
-# zenn/ の内容をルートに持つ同期ブランチ（例: publish）を作り直して push する
-git subtree split --prefix zenn -b publish
-git push -f origin publish
+# zenn/ の内容をルートに持つ同期ブランチ（例: publish）を更新して push する
+# （subtree split はコミット SHA を出力する。ローカルブランチを作らないため何度でも実行できる）
+git push -f origin "$(git subtree split --prefix zenn HEAD)":refs/heads/publish
 ```
 
 Zenn 連携専用の別リポジトリを使う場合は、`zenn/` の内容をそのリポジトリのルートへコピーして push する。
