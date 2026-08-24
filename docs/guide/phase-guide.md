@@ -152,37 +152,35 @@ AI エンジンがコンテンツの文脈を正確に把握し、引用でき�
 
 ---
 
-## Phase 5: テクニカル基盤の構築と構造化データ生成
+## Phase 5: テクニカル基盤の構築と公開形式への変換
 
 ### 目的
 
-完成した記事を AI システムが発見・読み取りできる技術フォーマットに変換する。
+完成した記事を、公開先プラットフォームに合わせて機械（AI エンジン）と読者の双方が読み取れる形式に変換する。
 
-### ゴール
+**Phase 5 は公開先によって担当エージェントと作業内容が分岐する**（Phase 1-4 は共通）。
 
-- JSON-LD スキーマが生成されている
-- セマンティック HTML マークアップ指示が出力されている
-- 公開チェックリストが全項目完了している
-- 継続監視計画が策定されている
+| 公開先 | 担当エージェント | 主な作業 | 出力 |
+| --- | --- | --- | --- |
+| 自社サイト等（デフォルト） | Technical Translator | JSON-LD 生成、セマンティック HTML 指示 | `05-technical.md` |
+| Medium | Medium Publisher | 英語化、Medium 互換記法変換、GPT 画像プロンプト | `05-medium.md` + `medium/articles/<slug>.md` |
 
-### 担当エージェント
+Medium は JSON-LD・OGP を自動生成するため手動生成しない。仕様は `.claude/rules/platforms/medium.md` を参照。
 
-**Technical Translator** — コンテンツの編集は行わない。技術変換のみ。
+### 自社サイト等の場合
 
-### 進め方
+- **ゴール**: JSON-LD スキーマ生成、セマンティック HTML マークアップ指示、公開チェックリスト全項目完了、継続監視計画の策定
+- **進め方**: 最終版記事とメタデータを `.claude/rules/phases/05-technical-prompt.md` のプロンプトに投入し、Technical Translator が JSON-LD・HTML 指示・チェックリストを生成、結果を `articles/<name>/05-technical.md` に記録する
+- **完了条件**: `05-technical.md` が作成され、JSON-LD が Google Rich Results Test で有効、公開チェックリスト全項目完了
 
-1. 最終版記事とメタデータを `.claude/rules/phases/05-technical-prompt.md` のプロンプトに投入する
-2. Technical Translator が JSON-LD、HTML 指示、チェックリストを生成する
-3. 結果を `articles/<name>/05-technical.md` に記録する
-4. 公開チェックリストを実施する
+### Medium の場合
 
-### 完了条件
-
-- `05-technical.md` が作成されている
-- JSON-LD が Google Rich Results Test で有効である
-- 公開チェックリスト全項目が完了している
+- `/medium-publish <article-name>` を実行する（Medium Publisher + `.claude/rules/phases/05-medium-prompt.md`）
+- 記事本文は**英語**。Phase 1 で Medium 内競合分析（上位記事・タグ・Publication）を済ませておく
+- **完了条件**: `medium/articles/<slug>.md`（**`status: draft` のまま**）、Medium で崩れる記法（表・Mermaid・脚注等）の除去、GPT 画像生成プロンプト完備、`05-medium.md` のチェックリスト完了
+- 画像生成（GPT）・Medium エディタへの貼り付け・公開は人間が行う。Phase 5 の完了条件に含まれない
 
 ### 判定ゲート: 公開判定
 
-- 公開準備が完了したか？
+- 公開準備が完了したか？（Medium の場合、公開そのものは人間が別途行う）
 - 継続監視計画が策定されたか？

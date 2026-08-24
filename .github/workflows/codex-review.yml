@@ -1,0 +1,45 @@
+# Fandhe-AI/actions の codex-review reusable workflow を呼び出す薄い wrapper。
+# Fandhe-AI/fandhe-frontend の同名 workflow（公開 public テンプレート
+# codex-review/templates/codex-review.public.yml 由来）を本リポジトリに導入したもの。
+# 導入手順・runner 要件は Fandhe-AI/actions の codex-review/README.md「セットアップ」を参照。
+name: Codex PR review
+
+on:
+  pull_request:
+    types: [opened, synchronize, reopened]
+    branches: [main]
+
+# reusable workflow のトップレベル concurrency は機能しないため呼び出し側で設定する
+concurrency:
+  group: codex-review-${{ github.ref }}
+  cancel-in-progress: true
+
+permissions:
+  contents: read
+
+jobs:
+  codex-review:
+    # SHA はコミットハッシュで固定する（@main・@latest 等の可変参照は不可、
+    # サプライチェーン対策）。以下は導入時（2026-08-24）に `latest` タグが指していた
+    # コミット。固定 SHA 時点の reusable workflow 本体は導入時にレビュー済み
+    # （fork PR 拒否・sudo 不在の fail-closed 検証・base コミット参照・
+    # 資格情報スキャン・2 ジョブ分離）。更新は明示的な PR で SHA を差し替えて行う。
+    uses: Fandhe-AI/actions/.github/workflows/codex-review.yml@158060055844b3de19b80c286e19cb604ba5d95b
+    permissions:
+      contents: read
+      pull-requests: write
+    # codex ジョブは runner-label（既定値 codex）のまま、self-hosted な codex 専用 runner を
+    # 使う。fork PR では reusable workflow 側の if 条件が fail-closed で実行を拒否するため、
+    # untrusted コードが self-hosted runner 上で実行されることはない。
+    with:
+      # skip-branch-prefixes は指定しない。判定がブランチ名の接頭辞のみのため、
+      # push できる主体が該当接頭辞のブランチを作るだけでレビュー gate を回避できる。
+      # 本リポジトリはテンプレートとして配布されるため安全側の既定とし、
+      # update-external.yml が生成する自動同期 PR もレビュー対象にする
+      # （同期 PR への codex の指摘は上流取り込みそのものに起因するため参考情報として扱い、
+      # 修正は取り込み元の上流リポジトリで行う）。
+      # post-feedback-runner-label の既定値は self-hosted であり、public リポジトリの
+      # ホステッドランナー既定方針に反する。コメント投稿ジョブは資格情報に触れないため
+      # 必ず ubuntu-latest（GitHub ホステッド）を明示する。
+      # 詳細は Fandhe-AI/actions の docs/runner-policy.md「3. 例外: codex-review」を参照。
+      post-feedback-runner-label: ubuntu-latest
