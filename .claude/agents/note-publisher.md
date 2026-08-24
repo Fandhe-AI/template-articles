@@ -67,9 +67,9 @@ Phase 4 でレビュー済みの記事を、note（https://note.com）で公開�
    - 各画像に日本語 Alt text とキャプション案を付ける
    - 生成後の人間の確認観点（文字化け・矢印の向き・ロゴ混入）を記録する
 
-5. **textlint の実行**（`cd zenn && pnpm exec textlint ../note/articles/<slug>.md`）
-   - 設定は `zenn/.textlintrc.json` を共用する。エラー 0 件を機械的に目指さず、残す指摘は件数と理由を `05-note.md` に明記する
-   - `no-mix-dearu-desumasu` は 0 件にする（本文 ですます調・箇条書き である調）
+5. **textlint / markdownlint の実行**
+   - textlint: `cd zenn && pnpm exec textlint ../note/articles/<slug>.md`（設定は `zenn/.textlintrc.json` を共用する）。エラー 0 件を機械的に目指さず、残す指摘は件数と理由を `05-note.md` に明記する。`no-mix-dearu-desumasu` は 0 件にする（本文 ですます調・箇条書き である調）
+   - markdownlint: `cd zenn && pnpm run lint:md:note`（設定は `zenn/.markdownlint-cli2.jsonc` を共用する）。**0 件にする**（本文 H1 は MD025 で検出される）
 
 6. **Phase 5 完了チェックリストの作成**
    - メタデータの妥当性（hashtags 3-8 件、`status: draft`、`paid: false`）

@@ -57,7 +57,7 @@ description: |
 | 品質判定（4→5） | 修正指示が全て反映されたか | Phase 3-4 再実施 |
 | 公開判定（5→公開） | 全チェックリスト項目が完了か | Phase 5 修正 |
 
-Zenn の場合、公開判定には**人間が記事全文を読んで自分の言葉として責任を持てると確認したこと**を含める。`published: true` への変更と push はエージェントが実行しない。Medium・note の場合も同様に `status: draft` のまま完了とし、貼り付け・公開（Medium は submit、note は有料設定・AI 学習提供の設定を含む）はエージェントが実行しない。
+Zenn・Medium・note の場合、公開判定（Phase 5 完了）の条件は**公開可能な状態を作ったこと**であり、人間による全文確認と公開は含めない（Zenn は `published: false`、Medium・note は `status: draft` のまま完了する）。**人間が記事全文を読んで自分の言葉として責任を持てると確認すること**と、公開操作（Zenn: `published: true` への変更と push、Medium: 貼り付け・submit、note: 貼り付け・有料設定・AI 学習提供の設定を含む公開）は、Phase 5 完了後の人間の工程として案内し、エージェントは実行しない。
 
 ## 対話ガイドライン
 
