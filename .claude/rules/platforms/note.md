@@ -158,7 +158,7 @@ pnpm exec textlint ../note/articles/<slug>.md
 - 文体は Zenn と同じ: **本文は ですます調、箇条書きは である調**（`no-mix-dearu-desumasu` の `preferInList` 既定が `である`）
 - `sentence-length`（100 文字）は装飾記号・URL を字数に算入するため、**機械的に全件ゼロを目指さない**。実際の日本語文が超過しているものだけ分割し、残した指摘は件数と理由を `05-note.md` に明記する
 - allowlist フィルタは Zenn 記法（`:::` 等）向けのため、note 記事では該当しない（そもそも Zenn 記法を使わない）
-- markdownlint はリポジトリルートの `.markdownlint.jsonc` が CI（lint-docs）で `note/articles/**` にも適用される
+- markdownlint も `zenn/` の設定（`zenn/.markdownlint-cli2.jsonc`）を共用して実行する: `cd zenn && pnpm run lint:md:note`
 
 ## 公開フロー
 
@@ -166,7 +166,7 @@ pnpm exec textlint ../note/articles/<slug>.md
 
 1. `note/articles/<slug>.md` を作成（`status: draft`、日本語本文、note 互換記法のみ）
 2. アイキャッチ・差し込み画像の GPT プロンプトと Alt text / キャプション案を `05-note.md` に記録する
-3. `cd zenn && pnpm exec textlint ../note/articles/<slug>.md` を通す（残す指摘は理由を記録）
+3. `cd zenn && pnpm exec textlint ../note/articles/<slug>.md` と `cd zenn && pnpm run lint:md:note` を通す（残す指摘は理由を記録）
 4. 手動チェックリスト（表・Mermaid・脚注・H4 以下・ネストリスト・インラインコード・単独行 URL が残っていないこと）を通す
 
 **公開（人間の担当範囲）** — Phase 5 完了後に、人間が任意のタイミングで実施する。

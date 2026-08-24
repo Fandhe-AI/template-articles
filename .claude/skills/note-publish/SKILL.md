@@ -62,6 +62,7 @@ user-invocable: true
 6. **Lint と手動チェックリストの実行**（Phase 5 の完了条件）
    - `cd zenn && pnpm exec textlint ../note/articles/<slug>.md` を通す（設定は `zenn/.textlintrc.json` を共用。
      残す指摘は件数と理由を `05-note.md` に明記。`no-mix-dearu-desumasu` は 0 件にする）
+   - `cd zenn && pnpm run lint:md:note` を通す（markdownlint。設定は `zenn/.markdownlint-cli2.jsonc` を共用）
    - note で崩れる記法が残っていないこと:
      表 / Mermaid / `:::` 記法 / 脚注 / H4 以下 / ネストリスト / インラインコード / コードブロックのファイル名記法 / 単独行 URL
    - 全リンク有効、引用はインラインリンク `[ソース名](URL)`

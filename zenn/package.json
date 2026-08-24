@@ -9,6 +9,7 @@
     "lint": "pnpm run lint:text && pnpm run lint:md",
     "lint:text": "textlint \"articles/**/*.md\"",
     "lint:md": "markdownlint-cli2 \"articles/**/*.md\"",
+    "lint:md:note": "markdownlint-cli2 \"../note/articles/**/*.md\"",
     "lint:fix": "textlint --fix \"articles/**/*.md\" && markdownlint-cli2 --fix \"articles/**/*.md\""
   },
   "license": "UNLICENSED",

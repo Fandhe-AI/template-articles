@@ -139,8 +139,9 @@
      - 各画像に日本語の Alt text とキャプション案を付ける
      - 表の画像化が必要な箇所は「GPT ではなく作図」と明記する
 
-  5. **textlint の実行**（`cd zenn && pnpm exec textlint ../note/articles/<slug>.md`）
-     - 設定は zenn/.textlintrc.json を共用する
+  5. **textlint / markdownlint の実行**
+     - textlint: `cd zenn && pnpm exec textlint ../note/articles/<slug>.md`（設定は zenn/.textlintrc.json を共用する）
+     - markdownlint: `cd zenn && pnpm run lint:md:note`（設定は zenn/.markdownlint-cli2.jsonc を共用する）
      - エラー 0 件を機械的に目指さない。残す指摘は件数と理由を 05-note.md に明記する
      - `no-mix-dearu-desumasu` は 0 件にする
 
