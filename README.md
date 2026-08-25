@@ -18,8 +18,8 @@ Phase 4: セマンティック・レビュー
 Phase 5: テクニカル基盤・構造化データ
   ├─ 自社サイト等 → Technical Translator（JSON-LD, OGP）
   ├─ Zenn        → Zenn Publisher（frontmatter, Zenn 記法, textlint）
-  ├─ Medium      → Medium Publisher（英語化, Medium 記法, GPT 画像プロンプト）
-  └─ note        → note Publisher（note 記法, GPT 画像プロンプト, textlint）※日本語の新規記事の既定
+  ├─ Medium      → Medium Publisher（英語化, Medium 記法, GPT 画像生成）
+  └─ note        → note Publisher（note 記法, GPT 画像生成, textlint）※日本語の新規記事の既定
   ▼ [公開判定]
 ```
 
@@ -84,11 +84,14 @@ articles/
 │
 ├── medium/                        # Medium 公開用の英語記事下書き
 │   ├── articles/                  # <slug>.md（status: draft）
-│   └── images/<yyyy-mm>/          # GPT 生成画像（人間が生成・保存）
+│   └── images/<yyyy-mm>/          # GPT 生成画像とプロンプト（<slug>-*.png / *.prompt.txt）
 │
 ├── note/                          # note 公開用の日本語記事下書き（日本語の新規記事の既定）
 │   ├── articles/                  # <slug>.md（status: draft）
-│   └── images/<yyyy-mm>/          # GPT 生成画像（人間が生成・保存）
+│   └── images/<yyyy-mm>/          # GPT 生成画像とプロンプト（<slug>-*.png / *.prompt.txt）
+│
+├── scripts/
+│   └── gen-image.sh               # Codex CLI（image_gen）経由の画像生成ラッパー
 │
 └── .claude/
     ├── agents/                    # マルチエージェント（8 ロール）
@@ -132,11 +135,11 @@ Phase 4 まで完了したら `/note-publish <name>` を実行する。`note/art
 
 - Phase 1 で note 内競合分析（上位記事の構成・ハッシュタグ）を追加で行う
 - note は表・Mermaid・脚注・インラインコードに非対応のため、変換時に箇条書き・画像化指示に置き換える
-- 画像は人間が GPT で生成し `note/images/<yyyy-mm>/` に保存する（見出し画像は 1280×670px 比率）
+- 画像はエージェントが `scripts/gen-image.sh`（Codex CLI の `image_gen`。ChatGPT ログインで動作、API キー不要）で生成し `note/images/<yyyy-mm>/` に保存する（見出し画像は 1280×670px 比率、生成は `1280x672`）。採否は人間が判断し、生成できない場合は人間が ChatGPT で生成する
 - textlint は Zenn の設定を共用する: `cd zenn && pnpm exec textlint ../note/articles/<slug>.md`
 
 > **note の規約と AI の扱い**の正典は [`.claude/rules/platforms/note.md`](.claude/rules/platforms/note.md) の「最重要の制約」（公式リンク・最終確認日つき。制度内容はここに複製しない）。公開前に人間が公式ページを再確認する。
-> エージェントの担当は下書きファイルの作成まで。人間が全文を読んで自分の言葉として加筆修正し、note エディタへの貼り付け・画像の再アップロード・ハッシュタグ設定・有料設定・公開を人間が行う（貼り付け手順は同ファイルの「公開モデル」）。
+> エージェントの担当は下書きファイルの作成と画像のローカル生成まで。人間が全文を読んで自分の言葉として加筆修正し、note エディタへの貼り付け・画像のアップロード・ハッシュタグ設定・有料設定・公開を人間が行う（貼り付け手順は同ファイルの「公開モデル」）。
 
 ## Zenn で公開する場合
 
@@ -166,10 +169,10 @@ Phase 4 まで完了したら `/medium-publish <name>` を実行する。`medium
 - 記事本文は英語、管理ドキュメントは日本語
 - Phase 1 で Medium 内競合分析（上位記事の構成・タグ・Publication 候補）を追加で行う
 - Medium は表・Mermaid・脚注に非対応のため、変換時に箇条書き・画像化指示に置き換える
-- 画像は人間が GPT で生成し `medium/images/<yyyy-mm>/` に保存する
+- 画像はエージェントが `scripts/gen-image.sh`（Codex CLI の `image_gen`。ChatGPT ログインで動作、API キー不要）で生成し `medium/images/<yyyy-mm>/` に保存する。採否は人間が判断し、生成できない場合は人間が ChatGPT で生成する
 
 > **Medium の AI コンテンツポリシー**の正典は [`.claude/rules/platforms/medium.md`](.claude/rules/platforms/medium.md) の「最重要の制約」（公式リンク・最終確認日つき。制度内容はここに複製しない）。公開前に人間が公式ページを再確認する。
-> エージェントの担当は下書きファイルの作成まで。人間が全文を読んで自分の言葉として加筆修正し、リッチテキスト化した本文の Medium エディタへの貼り付け・タグ設定・公開を人間が行う（貼り付け手順は同ファイルの「公開モデル」）。
+> エージェントの担当は下書きファイルの作成と画像のローカル生成まで。人間が全文を読んで自分の言葉として加筆修正し、リッチテキスト化した本文の Medium エディタへの貼り付け・画像のアップロード・タグ設定・公開を人間が行う（貼り付け手順は同ファイルの「公開モデル」）。
 
 仕様と GPT 画像プロンプトのテンプレートは [`.claude/rules/platforms/medium.md`](.claude/rules/platforms/medium.md) を参照。
 

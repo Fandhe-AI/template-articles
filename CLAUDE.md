@@ -22,8 +22,8 @@ Phase 5 は**公開先プラットフォームによって担当エージェン�
 | --- | --- | --- | --- |
 | 自社サイト等（デフォルト） | `05-technical.md` | Technical Translator | JSON-LD、セマンティック HTML、OGP |
 | Zenn | `05-zenn.md` | Zenn Publisher | frontmatter、Zenn 独自記法、textlint、公開チェックリスト |
-| Medium | `05-medium.md` | Medium Publisher | 英語化、Medium 互換記法、title/tags 設計、GPT 画像プロンプト、公開チェックリスト |
-| note | `05-note.md` | note Publisher | note 互換記法、title/hashtags 設計、GPT 画像プロンプト、textlint、公開チェックリスト |
+| Medium | `05-medium.md` | Medium Publisher | 英語化、Medium 互換記法、title/tags 設計、GPT 画像生成（プロンプト + `scripts/gen-image.sh`）、公開チェックリスト |
+| note | `05-note.md` | note Publisher | note 互換記法、title/hashtags 設計、GPT 画像生成（プロンプト + `scripts/gen-image.sh`）、textlint、公開チェックリスト |
 
 **日本語の新規記事の公開先は note を既定とする**（Zenn の仕組みは Zenn へ出す記事のために残す）。
 
@@ -33,9 +33,11 @@ Zenn の作業ディレクトリは `zenn/`（パッケージマネージャは 
 
 **Zenn は生成 AI による記事の量産を禁止している。** `published: true` への変更と Zenn 連携ブランチへの push は、人間が全文を確認したうえで人間が行う。エージェントは実行しない。Phase 5 は `published: false` のままで完了する。
 
-**note は日本語記事の既定の公開先。** note には GitHub 連携がなく、公開は人間が本文を note エディタに貼り付けることで行う（見出し・引用・コードブロックは変換されるが、リンクの変換は不安定で画像は反映されない。手順は `.claude/rules/platforms/note.md` の「公開モデル」）。note の規約と AI の扱い（正典: `.claude/rules/platforms/note.md` の「最重要の制約」。公開前に人間が公式ページを再確認する）を踏まえ、エージェントは `note/articles/<slug>.md`（`status: draft`・`paid: false`）の作成までを担当し、画像生成（GPT。プロンプトはエージェントが作成）・貼り付け・有料設定・AI 学習提供の設定・公開は人間が行う。出力先が note の場合、Phase 1 で note 内競合分析（上位記事・ハッシュタグ）を追加で行う。textlint は `zenn/.textlintrc.json` を共用する（`cd zenn && pnpm exec textlint ../note/articles/<slug>.md`）。
+**note は日本語記事の既定の公開先。** note には GitHub 連携がなく、公開は人間が本文を note エディタに貼り付けることで行う（見出し・引用・コードブロックは変換されるが、リンクの変換は不安定で画像は反映されない。手順は `.claude/rules/platforms/note.md` の「公開モデル」）。note の規約と AI の扱い（正典: `.claude/rules/platforms/note.md` の「最重要の制約」。公開前に人間が公式ページを再確認する）を踏まえ、エージェントは `note/articles/<slug>.md`（`status: draft`・`paid: false`）の作成と、画像の生成・ローカル保存（`note/images/<yyyy-mm>/`）までを担当し、生成画像の採否・貼り付け・画像アップロード・有料設定・AI 学習提供の設定・公開は人間が行う。出力先が note の場合、Phase 1 で note 内競合分析（上位記事・ハッシュタグ）を追加で行う。textlint は `zenn/.textlintrc.json` を共用する（`cd zenn && pnpm exec textlint ../note/articles/<slug>.md`）。
 
-**Medium は英語記事**（管理ドキュメントは日本語）。Medium には GitHub 連携がなく、公開は人間が Markdown をリッチテキスト化して Medium エディタに貼り付けることで行う（手順は `.claude/rules/platforms/medium.md` の「公開モデル」）。Medium の AI コンテンツポリシー（正典: `.claude/rules/platforms/medium.md` の「最重要の制約」。公開前に人間が公式ページを再確認する）を踏まえ、エージェントは `medium/articles/<slug>.md`（`status: draft`）の作成までを担当し、画像生成（GPT。プロンプトはエージェントが作成）・貼り付け・公開は人間が行う。出力先が Medium の場合、Phase 1 で Medium 内競合分析（上位記事・タグ・Publication）を追加で行う。
+**Medium は英語記事**（管理ドキュメントは日本語）。Medium には GitHub 連携がなく、公開は人間が Markdown をリッチテキスト化して Medium エディタに貼り付けることで行う（手順は `.claude/rules/platforms/medium.md` の「公開モデル」）。Medium の AI コンテンツポリシー（正典: `.claude/rules/platforms/medium.md` の「最重要の制約」。公開前に人間が公式ページを再確認する）を踏まえ、エージェントは `medium/articles/<slug>.md`（`status: draft`）の作成と、画像の生成・ローカル保存（`medium/images/<yyyy-mm>/`）までを担当し、生成画像の採否・貼り付け・画像アップロード・公開は人間が行う。出力先が Medium の場合、Phase 1 で Medium 内競合分析（上位記事・タグ・Publication）を追加で行う。
+
+**画像生成は `scripts/gen-image.sh` で行う。** Codex CLI の組み込み `image_gen` ツールを `codex exec` で非対話実行するラッパーで、ChatGPT アカウントで `codex login` 済みなら動く（`OPENAI_API_KEY` は不要。ChatGPT プランの Codex 利用枠を消費する）。手順・確認観点・失敗時のフォールバックの正典は `.claude/rules/platforms/medium.md` の「画像（GPT 生成）」（note も共用）。**数値・文字を含む表やグラフには使わない**（作図・スクリーンショット）。生成に失敗した場合、エージェントは API キーの設定や代替ツールの導入を行わず「手動生成待ち」と記録して Phase 5 を続行する。画像ファイルの有無は Phase 5 の完了条件に含めない。
 
 ### 判定ゲート
 
@@ -61,8 +63,8 @@ Zenn の作業ディレクトリは `zenn/`（パッケージマネージャは 
 | `auditor` | 監査・品質保証 — Phase 4 | 文章の書き直し（修正指示のみ） |
 | `technical-translator` | 構造化データ変換 — Phase 5（自社サイト等） | コンテンツ編集 |
 | `zenn-publisher` | Zenn 公開変換 — Phase 5（Zenn） | コンテンツ編集、JSON-LD 生成、公開の実行 |
-| `medium-publisher` | Medium 公開変換（英語化） — Phase 5（Medium） | コンテンツの意味を変える編集、JSON-LD 生成、画像生成、公開の実行 |
-| `note-publisher` | note 公開変換 — Phase 5（note） | コンテンツの意味を変える編集、JSON-LD 生成、画像生成、公開・有料設定の実行 |
+| `medium-publisher` | Medium 公開変換（英語化）・画像生成 — Phase 5（Medium） | コンテンツの意味を変える編集、JSON-LD 生成、画像のアップロード、公開の実行 |
+| `note-publisher` | note 公開変換・画像生成 — Phase 5（note） | コンテンツの意味を変える編集、JSON-LD 生成、画像のアップロード、公開・有料設定の実行 |
 
 ## GEO 執筆ルール
 
@@ -83,6 +85,7 @@ articles/<name>/     各記事（kebab-case）
 zenn/                Zenn の GitHub 連携用（articles/, images/）
 medium/              Medium 公開用の英語記事下書き（articles/, images/）
 note/                note 公開用の日本語記事下書き（articles/, images/）
+scripts/             補助スクリプト（gen-image.sh: Codex CLI 経由の画像生成）
 .claude/agents/      マルチエージェント定義
 .claude/rules/       AI 向けルール・リソース
   ├── phases/        フェーズ別 XML 構造化プロンプト
