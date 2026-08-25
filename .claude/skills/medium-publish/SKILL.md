@@ -59,7 +59,11 @@ user-invocable: true
 5. **成果物の出力**
    - `medium/articles/<slug>.md` — 英語記事本体（**`status: draft` 固定**）
    - `articles/$ARGUMENTS/05-medium.md` — 変換記録（`_templates/05-medium.md` フォーマット、日本語）
-     - GPT 画像生成プロンプト（feature image 1 件 + 差し込み 0-3 件）と Alt text / キャプション案を含む
+     - GPT 画像生成プロンプト（feature image 1 件 + 差し込み 0-3 件）と Alt text / キャプション案、生成結果を含む
+   - `medium/images/<yyyy-mm>/<slug>-*.prompt.txt` と `<slug>-*.png` — プロンプトと生成画像
+     （`scripts/gen-image.sh <prompt.txt> <out.png> <WxH>` で生成。feature `1536x1024` または `2048x1152`。
+     生成結果を Read で確認し最大 3 回まで再生成。失敗時は「手動生成待ち」と記録して続行する。
+     手順の正典は `.claude/rules/platforms/medium.md` の「生成手順」）
 
 6. **手動チェックリストの実行**（Phase 5 の完了条件。Medium 向け Lint ツールはない）
    - Medium で崩れる記法が残っていないこと:
@@ -70,10 +74,10 @@ user-invocable: true
 
 7. **README.md のステータス更新**
    - Phase 5 を「✅ 完了」、担当を `medium-publisher` に更新する
-   - **Phase 5 の完了条件は「公開可能な英語下書き + 画像プロンプトを作ったこと」であり、「公開したこと」ではない。** `status: draft` のままで Phase 5 は完了する
+   - **Phase 5 の完了条件は「公開可能な英語下書き + 画像プロンプト（と生成結果または手動生成待ちの記録）を作ったこと」であり、「公開したこと」ではない。** `status: draft` のままで Phase 5 は完了する
 
 8. **公開の案内**（Phase 5 の完了後、人間が行う作業として伝える）
-   - GPT で画像を生成し `medium/images/<yyyy-mm>/` に保存、文字化け・矢印の向き・ロゴ混入を確認する
+   - `medium/images/<yyyy-mm>/` の生成画像を確認し（文字化け・矢印の向き・ロゴ混入）、採用・差し替え・破棄を判断する。「手動生成待ち」は ChatGPT で生成して保存する
    - **人間が全文を読み、自分の言葉として責任を持てるよう加筆修正する**
    - frontmatter を除去し、Markdown をリッチテキスト化して Medium エディタに貼り付ける
      （**raw Markdown の貼り付けでは記法が変換されない**。手順は `.claude/rules/platforms/medium.md` の
@@ -85,7 +89,8 @@ user-invocable: true
 
 > Medium の AI コンテンツポリシーの正典は `.claude/rules/platforms/medium.md` の「最重要の制約」である（制度内容はここに複製しない）。公開前に人間が公式ページを再確認する。
 
-- Claude が Medium への貼り付け・submit・公開を行ってはならない（下書きファイルの作成まで）
+- Claude が Medium への貼り付け・画像アップロード・submit・公開を行ってはならない（下書きファイルと生成画像のローカル保存まで）
+- 画像生成に失敗しても API キーの設定や代替ツールの導入を行わない（「手動生成待ち」として記録する）
 - `status` を `draft` 以外にしてはならない
 - 公開は常に人間の明示的な判断と手作業で行う
 

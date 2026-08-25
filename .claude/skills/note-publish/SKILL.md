@@ -57,7 +57,11 @@ user-invocable: true
 5. **成果物の出力**
    - `note/articles/<slug>.md` — 日本語記事本体（**`status: draft`・`paid: false` 固定**）
    - `articles/$ARGUMENTS/05-note.md` — 変換記録（`_templates/05-note.md` フォーマット）
-     - GPT 画像生成プロンプト（見出し画像 1 件 + 差し込み 0-3 件）と Alt text / キャプション案を含む
+     - GPT 画像生成プロンプト（見出し画像 1 件 + 差し込み 0-3 件）と Alt text / キャプション案、生成結果を含む
+   - `note/images/<yyyy-mm>/<slug>-*.prompt.txt` と `<slug>-*.png` — プロンプトと生成画像
+     （`scripts/gen-image.sh <prompt.txt> <out.png> <WxH>` で生成。アイキャッチ `1280x672`、差し込み `1536x1024`。
+     生成結果を Read で確認し最大 3 回まで再生成。失敗時は「手動生成待ち」と記録して続行する。
+     手順の正典は `.claude/rules/platforms/medium.md` の「生成手順」）
 
 6. **Lint と手動チェックリストの実行**（Phase 5 の完了条件）
    - `cd zenn && pnpm exec textlint ../note/articles/<slug>.md` を通す（設定は `zenn/.textlintrc.json` を共用。
@@ -71,10 +75,10 @@ user-invocable: true
 
 7. **README.md のステータス更新**
    - Phase 5 を「✅ 完了」、担当を `note-publisher` に更新する
-   - **Phase 5 の完了条件は「公開可能な下書き + 画像プロンプトを作ったこと」であり、「公開したこと」ではない。** `status: draft` のままで Phase 5 は完了する
+   - **Phase 5 の完了条件は「公開可能な下書き + 画像プロンプト（と生成結果または手動生成待ちの記録）を作ったこと」であり、「公開したこと」ではない。** `status: draft` のままで Phase 5 は完了する
 
 8. **公開の案内**（Phase 5 の完了後、人間が行う作業として伝える）
-   - GPT で画像を生成し `note/images/<yyyy-mm>/` に保存、文字化け・矢印の向き・ロゴ混入を確認する
+   - `note/images/<yyyy-mm>/` の生成画像を確認し（文字化け・矢印の向き・ロゴ混入）、採用・差し替え・破棄を判断する。「手動生成待ち」は ChatGPT で生成して保存する
    - **人間が全文を読み、自分の言葉として責任を持てるよう加筆修正する**
    - frontmatter を除去し、本文を note エディタに貼り付ける（見出し・引用・コードブロックは変換されるが、
      **リンクの変換は不安定、画像は反映されない**。手順は `.claude/rules/platforms/note.md` の「公開モデル」）。
@@ -86,7 +90,8 @@ user-invocable: true
 
 > note の規約と AI の扱いの正典は `.claude/rules/platforms/note.md` の「最重要の制約」である（制度内容はここに複製しない）。公開前に人間が公式ページを再確認する（fail-closed）。
 
-- Claude が note への貼り付け・公開・有料設定を行ってはならない（下書きファイルの作成まで）
+- Claude が note への貼り付け・画像アップロード・公開・有料設定を行ってはならない（下書きファイルと生成画像のローカル保存まで）
+- 画像生成に失敗しても API キーの設定や代替ツールの導入を行わない（「手動生成待ち」として記録する）
 - `status` を `draft` 以外、`paid` を `false` 以外にしてはならない
 - 公開は常に人間の明示的な判断と手作業で行う
 

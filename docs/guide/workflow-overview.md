@@ -34,8 +34,8 @@ Phase 4: セマンティック・レビューとエンティティ一貫性監�
 Phase 5: テクニカル基盤の構築と公開形式への変換（公開先で分岐）
   │  自社サイト等 → Technical Translator（JSON-LD 生成、画像最適化指示）
   │  Zenn        → Zenn Publisher（frontmatter、Zenn 記法、textlint）
-  │  Medium      → Medium Publisher（英語化、Medium 記法、GPT 画像プロンプト）
-  │  note        → note Publisher（note 記法、GPT 画像プロンプト、textlint）
+  │  Medium      → Medium Publisher（英語化、Medium 記法、GPT 画像生成）
+  │  note        → note Publisher（note 記法、GPT 画像生成、textlint）
   │                ※日本語の新規記事は note を既定とする
   │
   ▼ [公開判定] 公開準備完了か？（Zenn・Medium・note の公開操作は人間が行う）
