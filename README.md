@@ -98,6 +98,7 @@ articles/
     ├── rules/                     # AI 向けルール・リソース
     │   ├── brand-identity.md
     │   ├── entity-dictionary.md
+    │   ├── github-actions.md      # .github/workflows/ 編集時の方針（GitHub Actions のキャッシュ方針）
     │   ├── phases/                # XML 構造化プロンプト
     │   ├── platforms/             # 公開先プラットフォーム仕様（zenn.md, medium.md, note.md）
     │   └── schemas/               # JSON-LD テンプレート

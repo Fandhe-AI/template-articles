@@ -92,7 +92,8 @@ scripts/             補助スクリプト（gen-image.sh: Codex CLI 経由の�
   ├── platforms/     公開先プラットフォーム仕様（zenn.md, medium.md, note.md）
   ├── schemas/       JSON-LD テンプレート
   ├── brand-identity.md
-  └── entity-dictionary.md
+  ├── entity-dictionary.md
+  └── github-actions.md   .github/workflows/ 編集時の方針（GitHub Actions のキャッシュ方針）
 .claude/skills/      スキル定義
 ```
 
